@@ -1,0 +1,9 @@
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Reports\ReportAdmin:
+    class: Services\CMS\Injectors\ReportAdmin
+  SilverStripe\VersionedAdmin\ArchiveAdmin:
+    class: Services\CMS\Injectors\ArchiveAdmin
+  SilverStripe\CMS\Controllers\CMSPagesController:
+    class: Services\CMS\Injectors\CMSPagesController
+  SilverStripe\CampaignAdmin\CampaignAdmin:
+    class: Services\CMS\Injectors\CampaignAdmin
