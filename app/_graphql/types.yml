@@ -1,0 +1,3 @@
+AuthenticatedMember:
+  fields:
+    id: Int!

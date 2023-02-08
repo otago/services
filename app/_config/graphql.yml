@@ -11,12 +11,5 @@ SilverStripe\Control\Director:
 SilverStripe\GraphQL\Schema\Schema:
   schemas:
     default:
-      models:
-        Services\Graduation\Regalia\Models\Submission:
-          fields: "*"
-          operations:
-            read: true
-        Services\Graduation\Regalia\Models\Ceremony:
-          fields: "*"
-          operations:
-            read: true
+      src:
+        - app/_graphql
