@@ -1,0 +1,22 @@
+SilverStripe\GraphQLDevTools\Controller:
+  schemas:
+    - default
+    - admin
+  default_schema: admin
+
+SilverStripe\Control\Director:
+  rules:
+    "graphql": '%$SilverStripe\GraphQL\Controller.default'
+
+SilverStripe\GraphQL\Schema\Schema:
+  schemas:
+    default:
+      models:
+        Services\Graduation\Regalia\Models\Submission:
+          fields: "*"
+          operations:
+            read: true
+        Services\Graduation\Regalia\Models\Ceremony:
+          fields: "*"
+          operations:
+            read: true
