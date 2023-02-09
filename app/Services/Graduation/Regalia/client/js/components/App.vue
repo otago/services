@@ -2,17 +2,20 @@
     <form v-if="ceremonies?.length">
         <fieldset>
             <legend>Graduation Regalia Requirements</legend>
+            <pre>{{ formData }}</pre>
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
-                    <li v-for="{ id, title } in ceremonies" :key="id">
+                    <li v-for="ceremony in ceremonies" :key="ceremony.id">
                         <input
                             type="checkbox"
                             name="attendance"
-                            :value="id"
-                            :id="`ceremony-${id}`"
+                            v-model="ceremony.attending"
+                            :id="`ceremony-${ceremony.id}`"
                         />
-                        <label :for="`ceremony-${id}`">{{ title }}</label>
+                        <label :for="`ceremony-${ceremony.id}`">{{
+                            ceremony.title
+                        }}</label>
                     </li>
                 </ul>
                 <p>
@@ -82,6 +85,13 @@ export default {
             ceremonies: [],
         };
     },
+    computed: {
+        formData() {
+            return {
+                ceremonies: this.ceremonies,
+            };
+        },
+    },
     apollo: {
         ceremonies: {
             query: gql`
@@ -94,7 +104,10 @@ export default {
                     }
                 }
             `,
-            update: (data) => data.readCeremonies.nodes,
+            update: (data) =>
+                data.readCeremonies.nodes.map(({ id, title }) => {
+                    return { id, title, attending: false };
+                }),
         },
     },
 };
