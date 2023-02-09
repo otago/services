@@ -20,6 +20,54 @@
                     ceremonies
                 </p>
             </fieldset>
+            <fieldset>
+                <legend>Regalia Hire Requirements</legend>
+                <p>
+                    Please record your Graduation Regalia requirements below.
+                    This information will then be used to determine your
+                    attendance and your gown requirements each time you attend a
+                    graduation.
+                </p>
+                <p>
+                    We strongly encourage you to wear the regalia of your
+                    highest qualification, however you are welcome to wear a
+                    lower qualification if you wish to match your school and/or
+                    students.
+                </p>
+                <p>
+                    Please note we do not order regalia from overseas. If you
+                    gained your qualification from an overseas institution you
+                    will be issued with an Otago University equivalent.
+                </p>
+                <div>
+                    <label for="gown-hire"> Is Gown Hire Required? </label>
+                    <select name="gown-hire" id="gown-hire">
+                        <option value="no">
+                            No, I do not require a gown to be hired
+                        </option>
+                        <option value="yes">
+                            Yes, I do require a gown to be hired
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="trencher-hire">
+                        Is Trencher Hire Required?
+                    </label>
+                    <select name="trencher-hire" id="trencher-hire">
+                        <option value="no">
+                            No, I do not require a matching Trencher
+                        </option>
+                        <option value="yes">
+                            Yes, I require a matching Trencher
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="comments"> Comments / Questions </label>
+                    <textarea id="comments" name="comments" />
+                </div>
+            </fieldset>
         </fieldset>
     </form>
     <div v-else>Loading...</div>
