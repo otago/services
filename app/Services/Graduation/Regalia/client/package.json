@@ -10,7 +10,11 @@
     "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.7",
+    "@vue/apollo-option": "^4.0.0-beta.2",
     "cross-env": "^7.0.3",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
     "laravel-mix": "^6.0.49",
     "vue": "^3.2.47",
     "vue-loader": "^17.0.1",
