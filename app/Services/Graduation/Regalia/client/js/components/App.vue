@@ -1,28 +1,26 @@
 <template>
-    <div>RegaliaForm</div>
+    <div>Token: {{ token }}</div>
 </template>
 
 <script>
 import gql from "graphql-tag";
 export default {
-    name: "RegaliaForm",
+    name: "App",
     data() {
         return {
-            memberId: 0,
+            token: "",
         };
     },
     apollo: {
-        memberId: {
+        token: {
             query: gql`
                 query readJWTs {
                     readJWTs {
-                        id
+                        token
                     }
                 }
             `,
-            update: (data) => {
-                console.log(data);
-            },
+            update: (data) => (data.readJWTs.length ? data.readJWTs[0] : ""),
         },
     },
 };
