@@ -1,6 +1,13 @@
 import { createApp } from 'vue';
 import RegaliaForm from './components/RegaliaForm.vue';
+import getToken from './components/getToken';
 
-const app = createApp(RegaliaForm);
+document.addEventListener('DOMContentLoaded', () => {
+    const appElement = document.getElementById('app');
+    const data = Object.assign({}, appElement.dataset);
+    const xCsrfToken = getToken(data);
+    console.log(xCsrfToken);
 
-app.mount("#app");
+    const app = createApp(RegaliaForm);
+    app.mount(appElement);
+});
