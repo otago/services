@@ -42,8 +42,8 @@
                     will be issued with an Otago University equivalent.
                 </p>
                 <div>
-                    <label for="gown-hire"> Is Gown Hire Required? </label>
-                    <select name="gown-hire" id="gown-hire" v-model="gownHire">
+                    <label for="gownHire"> Is Gown Hire Required? </label>
+                    <select name="gownHire" id="gownHire" v-model="gownHire">
                         <option :value="false">
                             No, I do not require a gown to be hired
                         </option>
@@ -51,14 +51,57 @@
                             Yes, I do require a gown to be hired
                         </option>
                     </select>
+                    <fieldset v-if="gownHire">
+                        <legend>
+                            Gowns can be collected from B Block during Gown Room
+                            open hours.
+                        </legend>
+                        <div>
+                            <label for="gownLength"> Gown Length </label>
+                            <select
+                                name="gownLength"
+                                id="gownLength"
+                                v-model="gownLength"
+                            >
+                                <option value="S">
+                                    S = Short, between 150cm and 163cm
+                                </option>
+                                <option value="SP">
+                                    SP = Short &amp; Petite, 158cm or shorter
+                                </option>
+                                <option value="M">
+                                    M = Medium, between 164cm and 176cm
+                                </option>
+                                <option value="T">
+                                    T = Tall, between 177cm and 187cm
+                                </option>
+                                <option value="XT">
+                                    XT = Extra Tall, 188cm or taller
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="preferredGown">
+                                Preferred Gown (Please select your highest
+                                qualification)
+                            </label>
+                            <select
+                                name="preferredGown"
+                                id="preferredGown"
+                                v-model="preferredGown"
+                            >
+                                <option value="">Other</option>
+                            </select>
+                        </div>
+                    </fieldset>
                 </div>
                 <div>
-                    <label for="trencher-hire">
+                    <label for="trencherHire">
                         Is Trencher Hire Required?
                     </label>
                     <select
-                        name="trencher-hire"
-                        id="trencher-hire"
+                        name="trencherHire"
+                        id="trencherHire"
                         v-model="trencherHire"
                     >
                         <option :value="false">
@@ -68,6 +111,23 @@
                             Yes, I require a matching Trencher
                         </option>
                     </select>
+                    <fieldset v-if="trencherHire">
+                        <legend>Trencher Details</legend>
+                        <label for="trencherSize"> Trencher Size </label>
+                        <select
+                            name="trencherSize"
+                            id="trencherSize"
+                            v-model="trencherSize"
+                        >
+                            <option
+                                v-for="index in trencherRange"
+                                :key="index"
+                                :value="index + trencherMinSize - 1"
+                            >
+                                {{ index + trencherMinSize - 1 }}cm
+                            </option>
+                        </select>
+                    </fieldset>
                 </div>
                 <div>
                     <label for="comments"> Comments / Questions </label>
@@ -93,14 +153,25 @@ export default {
             gownHire: false,
             trencherHire: false,
             comments: "",
+            gownLength: "M",
+            preferredGown: "",
+            trencherSize: 52,
+            trencherMinSize: 52,
+            trencherMaxSize: 65,
         };
     },
     computed: {
+        trencherRange() {
+            return this.trencherMaxSize - this.trencherMinSize + 1;
+        },
         formData() {
             return {
                 ceremonies: this.ceremonies,
                 gownHire: this.gownHire,
+                gownLength: this.gownHire ? this.gownLength : null,
+                preferredGown: this.gownHire ? this.preferredGown : null,
                 trencherHire: this.trencherHire,
+                trencherSize: this.trencherHire ? this.trencherSize : null,
                 comments: this.comments,
             };
         },
