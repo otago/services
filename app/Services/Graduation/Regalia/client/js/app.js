@@ -1,36 +1,29 @@
-import { ApolloClient, ApolloLink, concat, createHttpLink, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, concat, createHttpLink, InMemoryCache } from '@apollo/client/core';
 import { createApolloProvider } from '@vue/apollo-option';
 import { createApp } from 'vue';
+import store from './store';
 import RegaliaForm from './components/RegaliaForm.vue';
 import getToken from './components/getToken';
 
 document.addEventListener('DOMContentLoaded', () => {
     const appElement = document.getElementById('app');
     const data = Object.assign({}, appElement.dataset);
-    const xCsrfToken = getToken(data);
-    if (!xCsrfToken) {
-        return;
-    }
+    const jwtToken = getToken(data);
+    console.log(jwtToken);
     const cache = new InMemoryCache();
     const link = createHttpLink({
         uri: data.graphql,
     });
-    const authMiddleware = new ApolloLink((operation, forward) => {
-        operation.setContext({
-            headers: {
-                "X-CSRF-TOKEN": xCsrfToken
-            }
-        });
-        return forward(operation);
-    })
     const apolloClient = new ApolloClient({
-        link: concat(authMiddleware, link),
+        link: concat(link),
         cache,
     });
     const apolloProvider = createApolloProvider({
         defaultClient: apolloClient,
     })
     const app = createApp(RegaliaForm);
-    app.use(apolloProvider);
+    app
+        .use(store)
+        .use(apolloProvider);
     app.mount(appElement);
 });

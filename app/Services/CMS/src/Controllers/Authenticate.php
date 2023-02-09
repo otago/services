@@ -2,9 +2,9 @@
 
 namespace Services\CMS\Controllers;
 
+use Level51\JWTUtils\JWTUtils;
 use PageController;
 use SilverStripe\Security\Security;
-use SilverStripe\Security\SecurityToken;
 
 class Authenticate extends PageController
 {
@@ -17,13 +17,8 @@ class Authenticate extends PageController
             return $this->redirect("/Security/login?BackURL=/authenticate");
         }
         $backUrl = $session->get(self::class);
-        $query = parse_url($backUrl, PHP_URL_QUERY);
-        $token = SecurityToken::getSecurityID();
-        if ($query) {
-            $backUrl .= "&token=$token";
-        } else {
-            $backUrl .= "?token=$token";
-        }
+        $payload = JWTUtils::inst()->byBasicAuth($this->getRequest());
+        return json_encode($payload);
         return $this->redirect($backUrl);
     }
 
