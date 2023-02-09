@@ -9,7 +9,6 @@
                     <li v-for="ceremony in ceremonies" :key="ceremony.id">
                         <input
                             type="checkbox"
-                            name="attendance"
                             v-model="ceremony.attending"
                             :id="`ceremony-${ceremony.id}`"
                         />
@@ -44,11 +43,11 @@
                 </p>
                 <div>
                     <label for="gown-hire"> Is Gown Hire Required? </label>
-                    <select name="gown-hire" id="gown-hire">
-                        <option value="no">
+                    <select name="gown-hire" id="gown-hire" v-model="gownHire">
+                        <option :value="false">
                             No, I do not require a gown to be hired
                         </option>
-                        <option value="yes">
+                        <option :value="true">
                             Yes, I do require a gown to be hired
                         </option>
                     </select>
@@ -57,18 +56,26 @@
                     <label for="trencher-hire">
                         Is Trencher Hire Required?
                     </label>
-                    <select name="trencher-hire" id="trencher-hire">
-                        <option value="no">
+                    <select
+                        name="trencher-hire"
+                        id="trencher-hire"
+                        v-model="trencherHire"
+                    >
+                        <option :value="false">
                             No, I do not require a matching Trencher
                         </option>
-                        <option value="yes">
+                        <option :value="true">
                             Yes, I require a matching Trencher
                         </option>
                     </select>
                 </div>
                 <div>
                     <label for="comments"> Comments / Questions </label>
-                    <textarea id="comments" name="comments" />
+                    <textarea
+                        id="comments"
+                        name="comments"
+                        v-model="comments"
+                    />
                 </div>
             </fieldset>
         </fieldset>
@@ -83,12 +90,18 @@ export default {
     data() {
         return {
             ceremonies: [],
+            gownHire: false,
+            trencherHire: false,
+            comments: "",
         };
     },
     computed: {
         formData() {
             return {
                 ceremonies: this.ceremonies,
+                gownHire: this.gownHire,
+                trencherHire: this.trencherHire,
+                comments: this.comments,
             };
         },
     },
