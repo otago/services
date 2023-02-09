@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const cache = new InMemoryCache();
     const link = createHttpLink({
-        uri: data.graphqlUrl,
+        uri: data.graphql,
     });
     const authMiddleware = new ApolloLink((operation, forward) => {
         operation.setContext({
             headers: {
-                "X-CSRF-TOKEN": data.xCsrfToken
+                "X-CSRF-TOKEN": xCsrfToken
             }
         });
         return forward(operation);
