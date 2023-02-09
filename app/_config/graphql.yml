@@ -13,16 +13,16 @@ SilverStripe\GraphQL\Controller:
     Enabled: true
     Allow-Origin: "*"
 
-# SilverStripe\Core\Injector\Injector:
-#   SilverStripe\GraphQL\Controller.default:
-#     properties:
-#       corsConfig:
-#         Enabled: true
-#         Allow-Origin: "*"
-#         Allow-Headers: "Authorization, Content-Type"
-#         Allow-Methods: "GET, POST, OPTIONS"
-#         Allow-Credentials: "true"
-#         Max-Age: 600
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\GraphQL\Controller.default:
+    properties:
+      corsConfig:
+        Enabled: true
+        Allow-Origin: "*"
+        Allow-Headers: "Authorization, Content-Type"
+        Allow-Methods: "GET, POST, OPTIONS"
+        Allow-Credentials: "true"
+        Max-Age: 600
 
 SilverStripe\GraphQL\Schema\Schema:
   schemas:

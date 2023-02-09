@@ -3,27 +3,7 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
 export default {
     name: "RegaliaForm",
-    data() {
-        return {
-            memberId: 0,
-        };
-    },
-    apollo: {
-        memberId: {
-            query: gql`
-                query readJWTs {
-                    readJWTs {
-                        id
-                    }
-                }
-            `,
-            update: (data) => {
-                console.log(data);
-            },
-        },
-    },
 };
 </script>

@@ -1,4 +1,4 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, ApolloLink, concat, createHttpLink, InMemoryCache } from '@apollo/client/core';
 import { createApolloProvider } from '@vue/apollo-option';
 import { createApp } from 'vue';
 import App from './components/App.vue';
@@ -13,19 +13,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!jwt) {
         return;
     }
-    console.log(parseJwt(jwt));
     const link = createHttpLink({
         uri: data.graphql,
     });
+    const authMiddleware = new ApolloLink((operation, forward) => {
+        operation.setContext({
+            headers: {
+                "Authorization": jwt
+            }
+        });
+        return forward(operation);
+    })
     const apolloClient = new ApolloClient({
-        link: link,
+        link: concat(authMiddleware, link),
         cache,
     });
     const apolloProvider = createApolloProvider({
         defaultClient: apolloClient,
     })
-    const app = createApp(App);
-    app
-        .use(apolloProvider);
+    const app = createApp(App, { memberId: parseJwt(jwt).memberId, jwt: jwt });
+    app.use(apolloProvider);
     app.mount(appElement);
 });
