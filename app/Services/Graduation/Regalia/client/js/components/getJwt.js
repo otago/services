@@ -1,7 +1,7 @@
-export default ({ authenticate }) => {
+export default (url) => {
     const token = new URLSearchParams(window.location.search).get("token");
     if (!token) {
-        window.location.href = `${authenticate}?BackURL=${window.location.href}`;
+        window.location.href = `${url}?BackURL=${window.location.href}`;
         return false;
     }
     return token;
