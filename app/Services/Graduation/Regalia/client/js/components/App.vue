@@ -1,9 +1,12 @@
 <template>
-    <form v-if="!loading">
+    <div v-if="error">An error has occurred.</div>
+    <div v-else-if="loading">Loading...</div>
+    <form v-else>
+        <div v-if="success">
+            Your submission has successfully updated.
+            <button @click="success = false">Close</button>
+        </div>
         <fieldset>
-            {{ memberId }}
-            <pre>{{ submission }}</pre>
-            <pre>{{ ceremonies }}</pre>
             <legend>Graduation Regalia Requirements</legend>
             <fieldset>
                 <legend>Graduation Attendance</legend>
@@ -161,7 +164,6 @@
             </fieldset>
         </fieldset>
     </form>
-    <div v-else>Loading...</div>
 </template>
 
 <script>
@@ -190,6 +192,8 @@ export default {
     },
     data() {
         return {
+            success: false,
+            error: false,
             loading: true,
             submission: {},
             ceremonies: [],
@@ -209,41 +213,55 @@ export default {
         },
     },
     methods: {
+        handleErrors(errors) {
+            console.log(errors);
+            this.error = true;
+        },
         handleSubmit(e) {
             e.preventDefault();
             this.loading = true;
             if (this.submission.id) {
-                this.$apollo.mutate({
-                    mutation: gql`
+                this.$apollo
+                    .mutate({
+                        mutation: gql`
                     mutation updateSubmission($input: UpdateSubmissionInput!) {
                         updateSubmission(input: $input) {
                             ${fields}
                         }
                     }
                 `,
-                    variables: {
-                        input: this.submission,
-                    },
-                    update: (store, result) => {
-                        this.submission = { ...result.data.updateSubmission };
-                    },
-                });
+                        variables: {
+                            input: this.submission,
+                        },
+                        update: (store, result) => {
+                            this.submission = {
+                                ...result.data.updateSubmission,
+                            };
+                            this.success = true;
+                        },
+                    })
+                    .catch((errors) => this.handleErrors(errors));
             } else {
-                this.$apollo.mutate({
-                    mutation: gql`
+                this.$apollo
+                    .mutate({
+                        mutation: gql`
                     mutation createSubmission($input: CreateSubmissionInput!) {
                         createSubmission(input: $input) {
                             ${fields}
                         }
                     }
                 `,
-                    variables: {
-                        input: this.submission,
-                    },
-                    update: (store, result) => {
-                        this.submission = { ...result.data.createSubmission };
-                    },
-                });
+                        variables: {
+                            input: this.submission,
+                        },
+                        update: (store, result) => {
+                            this.submission = {
+                                ...result.data.createSubmission,
+                            };
+                            this.success = true;
+                        },
+                    })
+                    .catch((errors) => this.handleErrors(errors));
             }
         },
     },
@@ -277,6 +295,9 @@ export default {
                           gownRequirementsOther: null,
                           gownInstitutionOther: null,
                       },
+            error(errors) {
+                this.handleErrors(errors);
+            },
         },
         ceremonies: {
             query: gql`
@@ -293,6 +314,9 @@ export default {
                 data.readCeremonies.nodes.map((item) => {
                     return { ...item, attending: false };
                 }),
+            error(errors) {
+                this.handleErrors(errors);
+            },
         },
     },
 };
