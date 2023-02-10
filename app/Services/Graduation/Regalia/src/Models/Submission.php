@@ -2,11 +2,14 @@
 
 namespace Services\Graduation\Regalia\Models;
 
+use Services\CMS\Traits\JWT;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
 class Submission extends DataObject
 {
+    use JWT;
+
     private static $table_name = 'Services_Regalia_Models_Submission';
 
     private static $db = [
@@ -37,4 +40,12 @@ class Submission extends DataObject
         'Created' => 'Created',
         'LastEdited' => 'Last Edited',
     ];
+
+    public function canView($member = null)
+    {
+        if ($member && $member->ID == $this->MemberID) {
+            return true;
+        }
+        return parent::canView($member);
+    }
 }

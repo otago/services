@@ -2,8 +2,8 @@
 
 namespace Services\Graduation\Regalia\Models;
 
+use Services\CMS\Models\DataObject;
 use Services\CMS\Traits\JWT;
-use SilverStripe\ORM\DataObject;
 
 class Ceremony extends DataObject
 {
@@ -26,4 +26,9 @@ class Ceremony extends DataObject
         'Created' => 'Created',
         'LastEdited' => 'Last Edited',
     ];
+
+    public function canView($member = null)
+    {
+        return true;
+    }
 }
