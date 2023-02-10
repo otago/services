@@ -144,6 +144,10 @@
                     />
                 </div>
             </fieldset>
+            <fieldset>
+                <legend>Submit</legend>
+                <button @click="handleSubmit">Submit form</button>
+            </fieldset>
         </fieldset>
     </form>
     <div v-else>Loading...</div>
@@ -151,6 +155,19 @@
 
 <script>
 import gql from "graphql-tag";
+
+const fields = `id
+                trencherSize
+                deliveryLocation
+                comments
+                pickup
+                gownRequired
+                trencherRequired
+                gownLength
+                preferredGown
+                gownRequirementsOther
+                gownInstitutionOther`;
+
 export default {
     name: "App",
     props: {
@@ -172,23 +189,33 @@ export default {
             return this.trencherMaxSize - this.trencherMinSize + 1;
         },
     },
+    methods: {
+        handleSubmit(e) {
+            e.preventDefault();
+            this.$apollo.mutate({
+                mutation: gql`
+                    mutation createSubmission($input: CreateSubmissionInput!) {
+                        createSubmission(input: $input) {
+                            ${fields}
+                        }
+                    }
+                `,
+                variables: {
+                    input: this.submission,
+                },
+                update: (store, result) => {
+                    this.submission = result.data.createSubmission;
+                },
+            });
+        },
+    },
     apollo: {
         submission: {
             query: gql`
-                query ReadSubmissions {
+                query {
                     readSubmissions {
                         nodes {
-                            id
-                            trencherSize
-                            deliveryLocation
-                            comments
-                            pickup
-                            gownRequired
-                            trencherRequired
-                            gownLength
-                            preferredGown
-                            gownRequirementsOther
-                            gownInstitutionOther
+                            ${fields}
                         }
                     }
                 }
@@ -199,7 +226,7 @@ export default {
                           return { ...item };
                       })[0]
                     : {
-                          id: null,
+                          id: 0,
                           trencherSize: 52,
                           deliveryLocation: null,
                           comments: null,
@@ -214,7 +241,7 @@ export default {
         },
         ceremonies: {
             query: gql`
-                query ReadCeremonies {
+                query {
                     readCeremonies {
                         nodes {
                             id
