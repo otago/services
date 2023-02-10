@@ -1,21 +1,23 @@
 <template>
     <form v-if="ceremonies?.length">
         <fieldset>
+            {{ memberId }}
+            <pre>{{ submission }}</pre>
+            <pre>{{ ceremonies }}</pre>
             <legend>Graduation Regalia Requirements</legend>
-            <pre>{{ formData }}</pre>
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
-                    <li v-for="ceremony in ceremonies" :key="ceremony.id">
+                    <!-- <li v-for="ceremony in ceremonies" :key="ceremony.id">
                         <input
                             type="checkbox"
-                            v-model="ceremony.attending"
+                            v-model="submission.ceremony.attending"
                             :id="`ceremony-${ceremony.id}`"
                         />
                         <label :for="`ceremony-${ceremony.id}`">{{
                             ceremony.title
                         }}</label>
-                    </li>
+                    </li> -->
                 </ul>
                 <p>
                     Please indicate if you expect to be attending graduation
@@ -42,8 +44,12 @@
                     will be issued with an Otago University equivalent.
                 </p>
                 <div>
-                    <label for="gownHire"> Is Gown Hire Required? </label>
-                    <select name="gownHire" id="gownHire" v-model="gownHire">
+                    <label for="gownRequired"> Is Gown Hire Required? </label>
+                    <select
+                        name="gownRequired"
+                        id="gownRequired"
+                        v-model="submission.gownRequired"
+                    >
                         <option :value="false">
                             No, I do not require a gown to be hired
                         </option>
@@ -51,7 +57,7 @@
                             Yes, I do require a gown to be hired
                         </option>
                     </select>
-                    <fieldset v-if="gownHire">
+                    <fieldset v-if="submission.gownRequired">
                         <legend>
                             Gowns can be collected from B Block during Gown Room
                             open hours.
@@ -61,7 +67,7 @@
                             <select
                                 name="gownLength"
                                 id="gownLength"
-                                v-model="gownLength"
+                                v-model="submission.gownLength"
                             >
                                 <option value="S">
                                     S = Short, between 150cm and 163cm
@@ -88,7 +94,7 @@
                             <select
                                 name="preferredGown"
                                 id="preferredGown"
-                                v-model="preferredGown"
+                                v-model="submission.preferredGown"
                             >
                                 <option value="">Other</option>
                             </select>
@@ -96,13 +102,13 @@
                     </fieldset>
                 </div>
                 <div>
-                    <label for="trencherHire">
+                    <label for="trencherRequired">
                         Is Trencher Hire Required?
                     </label>
                     <select
-                        name="trencherHire"
-                        id="trencherHire"
-                        v-model="trencherHire"
+                        name="trencherRequired"
+                        id="trencherRequired"
+                        v-model="submission.trencherRequired"
                     >
                         <option :value="false">
                             No, I do not require a matching Trencher
@@ -111,13 +117,13 @@
                             Yes, I require a matching Trencher
                         </option>
                     </select>
-                    <fieldset v-if="trencherHire">
+                    <fieldset v-if="submission.trencherRequired">
                         <legend>Trencher Details</legend>
                         <label for="trencherSize"> Trencher Size </label>
                         <select
                             name="trencherSize"
                             id="trencherSize"
-                            v-model="trencherSize"
+                            v-model="submission.trencherSize"
                         >
                             <option
                                 v-for="index in trencherRange"
@@ -134,7 +140,7 @@
                     <textarea
                         id="comments"
                         name="comments"
-                        v-model="comments"
+                        v-model="submission.comments"
                     />
                 </div>
             </fieldset>
@@ -147,15 +153,16 @@
 import gql from "graphql-tag";
 export default {
     name: "App",
+    props: {
+        memberId: {
+            type: Number,
+            required: true,
+        },
+    },
     data() {
         return {
+            submission: {},
             ceremonies: [],
-            gownHire: false,
-            trencherHire: false,
-            comments: "",
-            gownLength: "M",
-            preferredGown: "",
-            trencherSize: 52,
             trencherMinSize: 52,
             trencherMaxSize: 65,
         };
@@ -164,19 +171,47 @@ export default {
         trencherRange() {
             return this.trencherMaxSize - this.trencherMinSize + 1;
         },
-        formData() {
-            return {
-                ceremonies: this.ceremonies,
-                gownHire: this.gownHire,
-                gownLength: this.gownHire ? this.gownLength : null,
-                preferredGown: this.gownHire ? this.preferredGown : null,
-                trencherHire: this.trencherHire,
-                trencherSize: this.trencherHire ? this.trencherSize : null,
-                comments: this.comments,
-            };
-        },
     },
     apollo: {
+        submission: {
+            query: gql`
+                query ReadSubmissions {
+                    readSubmissions {
+                        nodes {
+                            id
+                            trencherSize
+                            deliveryLocation
+                            comments
+                            pickup
+                            gownRequired
+                            trencherRequired
+                            gownLength
+                            preferredGown
+                            gownRequirementsOther
+                            gownInstitutionOther
+                        }
+                    }
+                }
+            `,
+            update: (data) =>
+                data.readSubmissions.nodes.length
+                    ? data.readSubmissions.nodes.map((item) => {
+                          return { ...item };
+                      })[0]
+                    : {
+                          id: null,
+                          trencherSize: 52,
+                          deliveryLocation: null,
+                          comments: null,
+                          pickup: null,
+                          gownRequired: false,
+                          trencherRequired: false,
+                          gownLength: "M",
+                          preferredGown: null,
+                          gownRequirementsOther: null,
+                          gownInstitutionOther: null,
+                      },
+        },
         ceremonies: {
             query: gql`
                 query ReadCeremonies {
@@ -189,8 +224,8 @@ export default {
                 }
             `,
             update: (data) =>
-                data.readCeremonies.nodes.map(({ id, title }) => {
-                    return { id, title, attending: false };
+                data.readCeremonies.nodes.map((item) => {
+                    return { ...item, attending: false };
                 }),
         },
     },

@@ -9,15 +9,13 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
-trait JWT
-{
-    public function canView($member = null)
+trait JWT {
+    public function getMemberViaAuthorizationHeaderJWT()
     {
         $token = Controller::curr()->getRequest()->getHeader("Authorization");
         if ($token && JWTUtils::inst()->check($token)) {
             $memberId = JWTJWT::decode($token, Config::inst()->get(JWTUtils::class, 'secret'), ['HS256'])->memberId;
-            $member = DataObject::get_by_id(Member::class, $memberId);
+            return DataObject::get_by_id(Member::class, $memberId);
         }
-        return parent::canView($member);
     }
 }

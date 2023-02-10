@@ -2,13 +2,10 @@
 
 namespace Services\Graduation\Regalia\Models;
 
-use Services\CMS\Models\DataObject;
-use Services\CMS\Traits\JWT;
+use SilverStripe\ORM\DataObject;
 
 class Ceremony extends DataObject
 {
-    use JWT;
-
     private static $table_name = 'Services_Regalia_Models_Ceremony';
 
     private static $db = [

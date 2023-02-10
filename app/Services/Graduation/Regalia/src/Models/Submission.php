@@ -3,8 +3,8 @@
 namespace Services\Graduation\Regalia\Models;
 
 use Services\CMS\Traits\JWT;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
+use SilverStripe\ORM\DataObject;
 
 class Submission extends DataObject
 {
@@ -43,9 +43,7 @@ class Submission extends DataObject
 
     public function canView($member = null)
     {
-        if ($member && $member->ID == $this->MemberID) {
-            return true;
-        }
-        return parent::canView($member);
+        $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
+        return parent::canView($member) || $member && $member->ID == $this->MemberID;
     }
 }
