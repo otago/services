@@ -5,6 +5,7 @@ namespace Services\Graduation\Regalia\Models;
 use Services\CMS\Traits\JWT;
 use SilverStripe\Security\Member;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Security;
 
 class Submission extends DataObject
 {
@@ -45,5 +46,23 @@ class Submission extends DataObject
     {
         $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
         return parent::canView($member) || $member && $member->ID == $this->MemberID;
+    }
+
+    public function canCreate($member = null, $context = [])
+    {
+        $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
+        if ($member->ID && !self::get()->filter("MemberID", $member->ID)->First()) {
+            return true;
+        }
+        return parent::canCreate($member, $context);
+    }
+
+    public function onBeforeWrite()
+    {
+        $member = Security::getCurrentUser() ?: $this->getMemberViaAuthorizationHeaderJWT();
+        if (!$this->MemberID) {
+            $this->MemberID = $member->ID;
+        }
+        parent::onBeforeWrite();
     }
 }

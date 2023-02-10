@@ -189,6 +189,11 @@ export default {
             return this.trencherMaxSize - this.trencherMinSize + 1;
         },
     },
+    watch: {
+        submission() {
+            delete this.submission.__typename;
+        },
+    },
     methods: {
         handleSubmit(e) {
             e.preventDefault();
@@ -204,7 +209,7 @@ export default {
                     input: this.submission,
                 },
                 update: (store, result) => {
-                    this.submission = result.data.createSubmission;
+                    this.submission = { ...result.data.createSubmission };
                 },
             });
         },
