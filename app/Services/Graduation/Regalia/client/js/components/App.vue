@@ -1,5 +1,5 @@
 <template>
-    <form v-if="ceremonies?.length">
+    <form v-if="!loading">
         <fieldset>
             {{ memberId }}
             <pre>{{ submission }}</pre>
@@ -190,6 +190,7 @@ export default {
     },
     data() {
         return {
+            loading: true,
             submission: {},
             ceremonies: [],
             trencherMinSize: 52,
@@ -204,11 +205,13 @@ export default {
     watch: {
         submission() {
             delete this.submission.__typename;
+            this.loading = false;
         },
     },
     methods: {
         handleSubmit(e) {
             e.preventDefault();
+            this.loading = true;
             if (this.submission.id) {
                 this.$apollo.mutate({
                     mutation: gql`
