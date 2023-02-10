@@ -197,21 +197,39 @@ export default {
     methods: {
         handleSubmit(e) {
             e.preventDefault();
-            this.$apollo.mutate({
-                mutation: gql`
+            if (this.submission.id) {
+                this.$apollo.mutate({
+                    mutation: gql`
+                    mutation updateSubmission($input: UpdateSubmissionInput!) {
+                        updateSubmission(input: $input) {
+                            ${fields}
+                        }
+                    }
+                `,
+                    variables: {
+                        input: this.submission,
+                    },
+                    update: (store, result) => {
+                        this.submission = { ...result.data.updateSubmission };
+                    },
+                });
+            } else {
+                this.$apollo.mutate({
+                    mutation: gql`
                     mutation createSubmission($input: CreateSubmissionInput!) {
                         createSubmission(input: $input) {
                             ${fields}
                         }
                     }
                 `,
-                variables: {
-                    input: this.submission,
-                },
-                update: (store, result) => {
-                    this.submission = { ...result.data.createSubmission };
-                },
-            });
+                    variables: {
+                        input: this.submission,
+                    },
+                    update: (store, result) => {
+                        this.submission = { ...result.data.createSubmission };
+                    },
+                });
+            }
         },
     },
     apollo: {

@@ -48,10 +48,15 @@ class Submission extends DataObject
         return parent::canView($member) || $member && $member->ID == $this->MemberID;
     }
 
+    public function canEdit($member = null)
+    {
+        return $this->canView($member);
+    }
+
     public function canCreate($member = null, $context = [])
     {
         $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
-        if ($member->ID && !self::get()->filter("MemberID", $member->ID)->First()) {
+        if ($member && !self::get()->filter("MemberID", $member->ID)->First()) {
             return true;
         }
         return parent::canCreate($member, $context);
