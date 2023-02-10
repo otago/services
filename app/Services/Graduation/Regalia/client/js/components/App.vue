@@ -99,6 +99,17 @@
                                 <option value="">Other</option>
                             </select>
                         </div>
+                        <div>
+                            <label for="regaliaInfo"
+                                >What does your regalia look like? Gown colour,
+                                hood details, etc.</label
+                            >
+                            <textarea
+                                id="regaliaInfo"
+                                name="regaliaInfo"
+                                v-model="submission.regaliaInfo"
+                            />
+                        </div>
                     </fieldset>
                 </div>
                 <div>
@@ -157,6 +168,7 @@
 import gql from "graphql-tag";
 
 const fields = `id
+                regaliaInfo
                 trencherSize
                 deliveryLocation
                 comments
@@ -250,6 +262,7 @@ export default {
                       })[0]
                     : {
                           id: 0,
+                          regaliaInfo: "",
                           trencherSize: 52,
                           deliveryLocation: null,
                           comments: null,

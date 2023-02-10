@@ -15,6 +15,7 @@ class Submission extends DataObject
 
     private static $db = [
         'TrencherSize'          => 'Int',
+        'RegaliaInfo'           => 'Text',
         'DeliveryLocation'      => 'Text',
         'Comments'              => 'Text',
         'Pickup'                => 'Boolean',
