@@ -8,8 +8,8 @@
         </div>
         <fieldset>
             <legend>Graduation Regalia Requirements</legend>
-            {{ submission }}
-            {{ ceremonies }}
+            <pre>{{ submission }}</pre>
+            <pre>{{ ceremonies }}</pre>
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
@@ -183,6 +183,7 @@ const fields = `id
                 preferredGown
                 gownRequirementsOther
                 gownInstitutionOther
+                ceremonyIdsJSON
                 ceremonies {
                     nodes {
                         id
@@ -229,22 +230,26 @@ export default {
                     false
                 );
             });
+            delete this.submission.ceremonies;
         },
         ceremonies: {
             handler() {
-                this.submission.ceremonyIdsJSON = JSON.stringify(
-                    this.ceremonies.reduce((prev, next) => {
-                        if (next.attending) {
-                            prev.push(parseInt(next.id));
-                        }
-                        return prev;
-                    }, [])
-                );
+                this?.syncCeremonyIds();
             },
             deep: true,
         },
     },
     methods: {
+        syncCeremonyIds() {
+            this.submission.ceremonyIdsJSON = JSON.stringify(
+                this.ceremonies.reduce((prev, next) => {
+                    if (next.attending) {
+                        prev.push(parseInt(next.id));
+                    }
+                    return prev;
+                }, [])
+            );
+        },
         handleErrors(errors) {
             console.log(errors);
             this.error = true;

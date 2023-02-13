@@ -65,11 +65,19 @@ class Submission extends DataObject
 
     public function onBeforeWrite()
     {
-        echo '<pre>'; var_dump($this->ceremonyIdsJSON); die();
+        if ($this->isChanged("ceremonyIdsJSON")) {
+            $this->Ceremonies()->removeAll();
+            $this->Ceremonies()->setByIDList(json_decode($this->getChangedFields()["ceremonyIdsJSON"]["after"]));
+        }
         $member = Security::getCurrentUser() ?: $this->getMemberViaAuthorizationHeaderJWT();
         if (!$this->MemberID) {
             $this->MemberID = $member->ID;
         }
         parent::onBeforeWrite();
+    }
+
+    public function getCeremonyIdsJSON()
+    {
+        return json_encode(array_keys($this->Ceremonies()->map()->toArray()));
     }
 }
