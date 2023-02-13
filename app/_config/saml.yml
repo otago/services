@@ -1,0 +1,27 @@
+---
+Name: mysamlsettings
+After: "#samlsettings"
+---
+SilverStripe\SAML\Services\SAMLConfiguration:
+  strict: false
+  debug: true
+  allow_insecure_email_linking: true
+  SP:
+    entityId: "https://jeffrey.op.ac.nz"
+    privateKey: "/var/www/html/services/certs/local.key"
+    x509cert: "/var/www/html/services/certs/local.cer"
+  IdP:
+    entityId: "https://devidp.op.ac.nz/adfs/services/trust"
+    x509cert: "/var/www/html/services/certs/devidp.pem"
+    singleSignOnService: "https://devidp.op.ac.nz/adfs/ls/"
+  Security:
+    signatureAlgorithm: "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
+    properties:
+      Middlewares:
+        SAMLMiddleware: '%$SilverStripe\SAML\Middleware\SAMLMiddleware'
+
+SilverStripe\SAML\Middleware\SAMLMiddleware:
+  enabled: true
