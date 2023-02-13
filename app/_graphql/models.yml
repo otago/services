@@ -28,7 +28,7 @@ Services\Graduation\Regalia\Models\Submission:
           fields:
             memberId: true
     create:
-      fields: &create
+      fields: &editableFields
         id: Int
         trencherSize: Int
         regaliaInfo: String
@@ -43,7 +43,7 @@ Services\Graduation\Regalia\Models\Submission:
         gownInstitutionOther: String
         ceremonyIdsJSON: String
     update:
-      fields: *create
+      fields: *editableFields
 Services\Graduation\Regalia\Models\Ceremony:
   fields:
     id: Int
