@@ -14,8 +14,7 @@ SilverStripe\SAML\Services\SAMLConfiguration:
     entityId: "https://devidp.op.ac.nz/adfs/services/trust"
     x509cert: "/var/www/html/services/certs/devidp.pem"
     singleSignOnService: "https://devidp.op.ac.nz/adfs/ls/"
-  Security:
-    signatureAlgorithm: "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    metadata: "https://devidp.op.ac.nz/FederationMetadata/2007-06/FederationMetadata.xml"
 
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Control\Director:
@@ -25,3 +24,11 @@ SilverStripe\Core\Injector\Injector:
 
 SilverStripe\SAML\Middleware\SAMLMiddleware:
   enabled: true
+  excluded_urls:
+    - "/^admin/"
+    - "/^dev/"
+    - "/^graphql/"
+
+SilverStripe\SAML\Extensions\SAMLMemberExtension:
+  claims_field_mappings:
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": "Email"
