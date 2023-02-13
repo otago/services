@@ -1,5 +1,6 @@
 Services\Graduation\Regalia\Models\Submission:
   fields:
+    id: Int
     trencherSize: Int
     regaliaInfo: String
     deliveryLocation: String
@@ -26,8 +27,23 @@ Services\Graduation\Regalia\Models\Submission:
         filter:
           fields:
             memberId: true
-    create: true
-    update: true
+    create:
+      fields: &create
+        id: Int
+        trencherSize: Int
+        regaliaInfo: String
+        deliveryLocation: String
+        comments: String
+        pickup: Boolean
+        gownRequired: Boolean
+        trencherRequired: Boolean
+        gownLength: String
+        preferredGown: String
+        gownRequirementsOther: String
+        gownInstitutionOther: String
+        ceremonyIdsJSON: String
+    update:
+      fields: *create
 Services\Graduation\Regalia\Models\Ceremony:
   fields:
     id: Int
