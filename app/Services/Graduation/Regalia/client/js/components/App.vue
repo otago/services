@@ -8,19 +8,20 @@
         </div>
         <fieldset>
             <legend>Graduation Regalia Requirements</legend>
+            {{ submission }}
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
-                    <!-- <li v-for="ceremony in ceremonies" :key="ceremony.id">
+                    <li v-for="ceremony in ceremonies" :key="ceremony.id">
                         <input
                             type="checkbox"
-                            v-model="submission.ceremony.attending"
+                            v-model="ceremony.attending"
                             :id="`ceremony-${ceremony.id}`"
                         />
                         <label :for="`ceremony-${ceremony.id}`">{{
                             ceremony.title
                         }}</label>
-                    </li> -->
+                    </li>
                 </ul>
                 <p>
                     Please indicate if you expect to be attending graduation
@@ -180,7 +181,13 @@ const fields = `id
                 gownLength
                 preferredGown
                 gownRequirementsOther
-                gownInstitutionOther`;
+                gownInstitutionOther
+                ceremonies {
+                    nodes {
+                        id
+                    }
+                }
+            `;
 
 export default {
     name: "App",
@@ -210,6 +217,17 @@ export default {
         submission() {
             delete this.submission.__typename;
             this.loading = false;
+            this.ceremonies.forEach((ceremony) => {
+                ceremony.attending = this.submission.ceremonies.nodes.reduce(
+                    (prev, { id }) => {
+                        if (id === ceremony.id) {
+                            return true;
+                        }
+                        return prev;
+                    },
+                    false
+                );
+            });
         },
     },
     methods: {
