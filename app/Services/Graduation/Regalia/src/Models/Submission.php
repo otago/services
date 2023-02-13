@@ -65,6 +65,7 @@ class Submission extends DataObject
 
     public function onBeforeWrite()
     {
+        echo '<pre>'; var_dump($this->ceremonyIdsJSON); die();
         $member = Security::getCurrentUser() ?: $this->getMemberViaAuthorizationHeaderJWT();
         if (!$this->MemberID) {
             $this->MemberID = $member->ID;

@@ -1,5 +1,24 @@
 Services\Graduation\Regalia\Models\Submission:
-  fields: "*"
+  fields:
+    trencherSize: Int
+    regaliaInfo: String
+    deliveryLocation: String
+    comments: String
+    pickup: Boolean
+    gownRequired: Boolean
+    trencherRequired: Boolean
+    gownLength: String
+    preferredGown: String
+    gownRequirementsOther: String
+    gownInstitutionOther: String
+    ceremonies:
+      fields:
+        nodes:
+          type: "Ceremony"
+      operations:
+        read: true
+        update: true
+    ceremonyIdsJSON: String
   operations:
     read: true
     create: true

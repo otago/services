@@ -9,6 +9,7 @@
         <fieldset>
             <legend>Graduation Regalia Requirements</legend>
             {{ submission }}
+            {{ ceremonies }}
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
@@ -229,6 +230,19 @@ export default {
                 );
             });
         },
+        ceremonies: {
+            handler() {
+                this.submission.ceremonyIdsJSON = JSON.stringify(
+                    this.ceremonies.reduce((prev, next) => {
+                        if (next.attending) {
+                            prev.push(parseInt(next.id));
+                        }
+                        return prev;
+                    }, [])
+                );
+            },
+            deep: true,
+        },
     },
     methods: {
         handleErrors(errors) {
@@ -242,12 +256,12 @@ export default {
                 this.$apollo
                     .mutate({
                         mutation: gql`
-                    mutation updateSubmission($input: UpdateSubmissionInput!) {
-                        updateSubmission(input: $input) {
-                            ${fields}
-                        }
-                    }
-                `,
+                            mutation updateSubmission($input: UpdateSubmissionInput!) {
+                                updateSubmission(input: $input) {
+                                    ${fields}
+                                }
+                            }
+                        `,
                         variables: {
                             input: this.submission,
                         },
