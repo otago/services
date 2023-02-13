@@ -8,8 +8,6 @@
         </div>
         <fieldset>
             <legend>Graduation Regalia Requirements</legend>
-            <pre>{{ submission }}</pre>
-            <pre>{{ ceremonies }}</pre>
             <fieldset>
                 <legend>Graduation Attendance</legend>
                 <ul>
@@ -220,7 +218,7 @@ export default {
             delete this.submission.__typename;
             this.loading = false;
             this.ceremonies.forEach((ceremony) => {
-                ceremony.attending = this.submission.ceremonies.nodes.reduce(
+                ceremony.attending = this.submission.ceremonies?.nodes.reduce(
                     (prev, { id }) => {
                         if (id === ceremony.id) {
                             return true;
@@ -304,17 +302,24 @@ export default {
     },
     apollo: {
         submission: {
-            query: gql`
-                query {
-                    readSubmissions {
+            query() {
+                return gql`
+                query readSubmissions($memberId: Int!) {
+                    readSubmissions(filter: {memberId: {eq: $memberId}}) {
                         nodes {
                             ${fields}
                         }
                     }
                 }
-            `,
+            `;
+            },
+            variables() {
+                return {
+                    memberId: this.memberId,
+                };
+            },
             update: (data) =>
-                data.readSubmissions.nodes.length
+                data.readSubmissions?.nodes.length
                     ? data.readSubmissions.nodes.map((item) => {
                           return { ...item };
                       })[0]
@@ -337,18 +342,20 @@ export default {
             },
         },
         ceremonies: {
-            query: gql`
-                query {
-                    readCeremonies {
-                        nodes {
-                            id
-                            title
+            query() {
+                return gql`
+                    query {
+                        readCeremonies {
+                            nodes {
+                                id
+                                title
+                            }
                         }
                     }
-                }
-            `,
+                `;
+            },
             update: (data) =>
-                data.readCeremonies.nodes.map((item) => {
+                data.readCeremonies?.nodes.map((item) => {
                     return { ...item, attending: false };
                 }),
             error(errors) {

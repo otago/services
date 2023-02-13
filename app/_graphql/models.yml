@@ -11,6 +11,8 @@ Services\Graduation\Regalia\Models\Submission:
     preferredGown: String
     gownRequirementsOther: String
     gownInstitutionOther: String
+    memberId: Int
+    ceremonyIdsJSON: String
     ceremonies:
       fields:
         nodes:
@@ -18,12 +20,17 @@ Services\Graduation\Regalia\Models\Submission:
       operations:
         read: true
         update: true
-    ceremonyIdsJSON: String
   operations:
-    read: true
+    read:
+      plugins:
+        filter:
+          fields:
+            memberId: true
     create: true
     update: true
 Services\Graduation\Regalia\Models\Ceremony:
-  fields: "*"
+  fields:
+    id: Int
+    title: String
   operations:
     read: true
