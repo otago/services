@@ -6,6 +6,8 @@ use Level51\JWTUtils\JWTUtils;
 use PageController;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\SAML\Authenticators\SAMLAuthenticator;
+use SilverStripe\SAML\Authenticators\SAMLLoginHandler;
 use SilverStripe\Security\Security;
 
 class Authenticate extends PageController
@@ -20,7 +22,10 @@ class Authenticate extends PageController
         }
         if (!Security::getCurrentUser()) {
             $request->getSession()->set("BackURL", $this->getLink());
-            return $this->redirect("/Security/login");
+            $loginHandler = SAMLLoginHandler::create("/Security/login/default", new SAMLAuthenticator());
+            return $loginHandler->doLogin([
+                "BackURL" => $this->getLink()
+            ], $loginHandler->loginForm(), $this->getRequest());
         }
         $payload = JWTUtils::inst()->byBasicAuth($this->getRequest());
         return $this->redirect($this->join_links($absoluteBackUrl, "?token=" . $payload['token']));
