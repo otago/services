@@ -9,18 +9,23 @@ use SilverStripe\Security\Member;
 
 class SyncMembers extends BuildTask
 {
+    public $ebs;
+
     public function run($request)
     {
         echo "Connecting to EBS...\n";
-        $ebs = EBSWebservice::connect();
+        $this->ebs = EBSWebservice::connect();
+
         echo "Requesting all staff data...\n";
-        $result = $ebs->request($this->config()->routes["getAllStaff"]);
+        $result = $this->ebs->request($this->config()->routes["getStaff"] . "0");
+
         foreach ($result->Data()->staff as $staffData) {
             $member = Member::get()->filter("Email", $staffData->PrimaryEmail)->First();
             if (!$member) {
                 continue;
             }
-            $this->SyncMember($member, $staffData);
+            $member = $this->SyncMember($member, $staffData);
+            $this->SyncQualification($member);
         }
     }
 
@@ -34,6 +39,15 @@ class SyncMembers extends BuildTask
             $member->setField($key, $value);
         }
         $member->Synced = DBDatetime::now()->getValue();
+        $member->write();
+        return $member;
+    }
+
+    public function SyncQualification($member)
+    {
+        echo "Syncing qualification for $member->Title...\n";
+        $result = $this->ebs->request($this->config()->routes["getQualification"] . $member->PayGlobalID);
+        $member->QualificationJSON = $result->Raw();
         $member->write();
     }
 }

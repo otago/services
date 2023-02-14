@@ -9,7 +9,7 @@ class Member extends DataExtension
 {
     private static $db = [
         'PayGlobalID'       => 'Int',
-        'Qualifications'    => 'Text',
+        'QualificationJSON' => 'Text',
         'Synced'            => DBDatetime::class,
     ];
 }

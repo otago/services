@@ -1,3 +1,4 @@
 Services\EBS\Tasks\SyncMembers:
   routes:
-    getAllStaff: "Modules/15866/Screens/U_StaffHub/Data/staff?p_studentid=0"
+    getStaff: "Modules/15866/Screens/U_StaffHub/Data/staff?p_studentid="
+    getQualification: "Modules/15866/Screens/U_fthfim/Data/StaffQualifcation?p_studentid="
