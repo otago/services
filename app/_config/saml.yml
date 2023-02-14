@@ -5,7 +5,6 @@ After: "#samlsettings"
 SilverStripe\SAML\Services\SAMLConfiguration:
   strict: false
   debug: true
-  allow_insecure_email_linking: true
   SP:
     entityId: "https://jeffrey.op.ac.nz"
     privateKey: "/var/www/html/services/certs/local.key"
@@ -16,19 +15,17 @@ SilverStripe\SAML\Services\SAMLConfiguration:
     singleSignOnService: "https://devidp.op.ac.nz/adfs/ls/"
     metadata: "https://devidp.op.ac.nz/FederationMetadata/2007-06/FederationMetadata.xml"
 
-SilverStripe\Core\Injector\Injector:
-  SilverStripe\Control\Director:
-    properties:
-      Middlewares:
-        SAMLMiddleware: '%$SilverStripe\SAML\Middleware\SAMLMiddleware'
-
-SilverStripe\SAML\Middleware\SAMLMiddleware:
-  enabled: true
-  excluded_urls:
-    - "/^admin/"
-    - "/^dev/"
-    - "/^graphql/"
-
 SilverStripe\SAML\Extensions\SAMLMemberExtension:
   claims_field_mappings:
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": "Email"
+
+---
+Name: MyAuth
+After:
+  - "#coresecurity"
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Security\Security:
+    properties:
+      authenticators:
+        default: '%$SilverStripe\SAML\Authenticators\SAMLAuthenticator'
