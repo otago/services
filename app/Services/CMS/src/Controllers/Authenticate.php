@@ -4,24 +4,26 @@ namespace Services\CMS\Controllers;
 
 use Level51\JWTUtils\JWTUtils;
 use PageController;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Security;
 
 class Authenticate extends PageController
 {
     public function index()
     {
-        $session = $this->getRequest()->getSession();
-        $backUrl = $session->get(self::class);
-        if (!$backUrl) {
-            $backUrl = $this->getRequest()->getVar("BackURL");
-            $session->set(self::class, $backUrl);
+        $request = Injector::inst()->get(HTTPRequest::class);
+        $absoluteBackUrl = $request->getSession()->get("AbsoluteBackURL");
+        if (!$absoluteBackUrl) {
+            $absoluteBackUrl = $this->getRequest()->getVar("AbsoluteBackURL");
+            $request->getSession()->set("AbsoluteBackURL", $absoluteBackUrl);
         }
         if (!Security::getCurrentUser()) {
-            return $this->redirect("/Security/login?BackURL=/authenticate");
+            $request->getSession()->set("BackURL", $this->getLink());
+            return $this->redirect("/Security/login");
         }
-        $session->clear(self::class);
         $payload = JWTUtils::inst()->byBasicAuth($this->getRequest());
-        return $this->redirect($this->join_links($backUrl, "?token=" . $payload['token']));
+        return $this->redirect($this->join_links($absoluteBackUrl, "?token=" . $payload['token']));
     }
 
     public function getLink()
