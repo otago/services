@@ -9,7 +9,8 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 
-trait JWT {
+trait JWT
+{
     public function getMemberViaAuthorizationHeaderJWT()
     {
         $token = Controller::curr()->getRequest()->getHeader("Authorization");

@@ -1,0 +1,3 @@
+Services\EBS\Tasks\SyncMembers:
+  routes:
+    getAllStaff: "Modules/15866/Screens/U_StaffHub/Data/staff?p_studentid=0"

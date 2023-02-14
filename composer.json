@@ -9,7 +9,8 @@
         "silverstripe/login-forms": "~4.8.0@stable",
         "silverstripe/graphql-devtools": "dev-master",
         "level51/silverstripe-jwt-utils": "^0.2.1",
-        "silverstripe/saml": "^2.1"
+        "silverstripe/saml": "^2.1",
+        "otago/ebs": "^4.10"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
