@@ -4,7 +4,6 @@ namespace Services\EBS\Tasks;
 
 use OP\EBSWebservice;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\Security\Member;
 
 class SyncMembers extends BuildTask

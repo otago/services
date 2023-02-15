@@ -16,8 +16,72 @@ SilverStripe\GraphQL\Controller:
 SilverStripe\GraphQL\Schema\Schema:
   schemas:
     default:
-      src:
-        - app/_graphql
+      types:
+        Qualification:
+          fields:
+            qualificationid: Int
+            description1: String
+            description2: String
+      models:
+        SilverStripe\Security\Member:
+          fields:
+            id: Int
+            qualifications:
+              type: "[Qualification]"
+          operations:
+            read: true
+        Services\Graduation\Regalia\Models\Submission:
+          fields:
+            id: Int
+            trencherSize: Int
+            regaliaInfo: String
+            deliveryLocation: String
+            comments: String
+            pickup: Boolean
+            gownRequired: Boolean
+            trencherRequired: Boolean
+            gownLength: String
+            preferredGown: String
+            gownRequirementsOther: String
+            gownInstitutionOther: String
+            memberId: Int
+            ceremonyIdsJSON: String
+            ceremonies:
+              fields:
+                nodes:
+                  type: "Ceremony"
+              operations:
+                read: true
+                update: true
+          operations:
+            read:
+              plugins:
+                filter:
+                  fields:
+                    memberId: true
+            create:
+              fields: &editableFields
+                id: Int
+                trencherSize: Int
+                regaliaInfo: String
+                deliveryLocation: String
+                comments: String
+                pickup: Boolean
+                gownRequired: Boolean
+                trencherRequired: Boolean
+                gownLength: String
+                preferredGown: String
+                gownRequirementsOther: String
+                gownInstitutionOther: String
+                ceremonyIdsJSON: String
+            update:
+              fields: *editableFields
+        Services\Graduation\Regalia\Models\Ceremony:
+          fields:
+            id: Int
+            title: String
+          operations:
+            read: true
 
 ---
 Name: load-last

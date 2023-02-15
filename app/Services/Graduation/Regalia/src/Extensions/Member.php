@@ -5,6 +5,7 @@ namespace Services\Graduation\Extensions;
 use OP\EBSWebservice;
 use Services\EBS\Tasks\SyncMembers;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 
 class Member extends DataExtension
@@ -28,5 +29,17 @@ class Member extends DataExtension
         );
         $this->owner->QualificationJSON = $result->Raw();
         $this->owner->write();
+    }
+
+    public function getQualifications()
+    {
+        $array = ArrayList::create();
+        $json = json_decode($this->owner->QualificationJSON);
+        if ($json) {
+            foreach ($json->StaffQualifcation as $qualification) {
+                $array->add(array_change_key_case((array)$qualification));
+            }
+        }
+        return $array;
     }
 }
