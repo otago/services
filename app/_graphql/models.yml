@@ -21,6 +21,10 @@ Services\Graduation\Regalia\Models\Submission:
       operations:
         read: true
         update: true
+    qualifications:
+      fields:
+        nodes:
+          type: "Qualification"
   operations:
     read:
       plugins:

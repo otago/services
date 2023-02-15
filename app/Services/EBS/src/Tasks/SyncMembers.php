@@ -25,29 +25,13 @@ class SyncMembers extends BuildTask
                 continue;
             }
             $member = $this->SyncMember($member, $staffData);
-            $this->SyncQualification($member);
         }
     }
 
     public function SyncMember($member, $staffData)
     {
         echo "Syncing member $member->Title...\n";
-        foreach ($staffData->toMap() as $key => $value) {
-            if ($key == "ID") {
-                continue;
-            }
-            $member->setField($key, $value);
-        }
-        $member->Synced = DBDatetime::now()->getValue();
-        $member->write();
+        $member->Sync($staffData);
         return $member;
-    }
-
-    public function SyncQualification($member)
-    {
-        echo "Syncing qualification for $member->Title...\n";
-        $result = $this->ebs->request($this->config()->routes["getQualification"] . $member->PayGlobalID);
-        $member->QualificationJSON = $result->Raw();
-        $member->write();
     }
 }

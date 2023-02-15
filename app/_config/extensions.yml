@@ -1,3 +1,4 @@
 SilverStripe\Security\Member:
   extensions:
     - Services\EBS\Extensions\Member
+    - Services\Graduation\Extensions\Member
