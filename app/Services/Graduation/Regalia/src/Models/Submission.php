@@ -5,7 +5,6 @@ namespace Services\Graduation\Regalia\Models;
 use Services\CMS\Controllers\Authenticate;
 use SilverStripe\Security\Member;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Security;
 
 class Submission extends DataObject
 {
