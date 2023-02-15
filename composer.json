@@ -10,7 +10,9 @@
         "silverstripe/graphql-devtools": "dev-master",
         "level51/silverstripe-jwt-utils": "^0.2.1",
         "silverstripe/saml": "^2.1",
-        "otago/ebs": "^4.10"
+        "otago/ebs": "^4.10",
+        "silverstripe/crontask": "^2.5",
+        "silverstripe/dynamodb": "^4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
