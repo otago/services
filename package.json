@@ -5,6 +5,6 @@
   "repository": "git@github.com:otago/services.git",
   "license": "MIT",
   "scripts": {
-    "cloud-build": "cd app/Services/Graduation/Regalia/client && yarn prod"
+    "cloud-build": "cd app/Services/Graduation/Regalia/client && npm i && npm run prod"
   }
 }
