@@ -2,15 +2,13 @@
 
 namespace Services\Graduation\Regalia\Models;
 
-use Services\CMS\Traits\JWT;
+use Services\CMS\Controllers\Authenticate;
 use SilverStripe\Security\Member;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Security;
 
 class Submission extends DataObject
 {
-    use JWT;
-
     private static $table_name = 'Services_Regalia_Models_Submission';
 
     private static $db = [
@@ -45,7 +43,7 @@ class Submission extends DataObject
 
     public function canView($member = null)
     {
-        $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
+        $member = $member ?? DataObject::get_by_id(Member::class, Authenticate::getMemberIDByJWT());
         return parent::canView($member) || $member && $member->ID == $this->MemberID;
     }
 
@@ -56,7 +54,7 @@ class Submission extends DataObject
 
     public function canCreate($member = null, $context = [])
     {
-        $member = $member ?: $this->getMemberViaAuthorizationHeaderJWT();
+        $member = $member ?? DataObject::get_by_id(Member::class, Authenticate::getMemberIDByJWT());
         if ($member && !self::get()->filter("MemberID", $member->ID)->First()) {
             return true;
         }
@@ -69,7 +67,7 @@ class Submission extends DataObject
             $this->Ceremonies()->removeAll();
             $this->Ceremonies()->setByIDList(json_decode($this->getChangedFields()["ceremonyIdsJSON"]["after"]));
         }
-        $member = Security::getCurrentUser() ?: $this->getMemberViaAuthorizationHeaderJWT();
+        $member = $member ?? DataObject::get_by_id(Member::class, Authenticate::getMemberIDByJWT());
         if (!$this->MemberID) {
             $this->MemberID = $member->ID;
         }

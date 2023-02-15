@@ -99,7 +99,15 @@
                                 id="preferredGown"
                                 v-model="submission.preferredGown"
                             >
-                                <option value="">Other</option>
+                                <option
+                                    :value="`${qualification.description1} ${qualification.description2}`"
+                                    v-for="qualification in qualifications"
+                                    :key="qualification.qualificationid"
+                                >
+                                    {{ qualification.description1 }}
+                                    {{ qualification.description2 }}
+                                </option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div>
@@ -204,6 +212,7 @@ export default {
             loading: true,
             submission: {},
             ceremonies: [],
+            qualifications: [],
             trencherMinSize: 52,
             trencherMaxSize: 65,
         };
@@ -304,7 +313,7 @@ export default {
         submission: {
             query() {
                 return gql`
-                query readSubmissions($memberId: Int!) {
+                query readSubmissions($memberId: ID!) {
                     readSubmissions(filter: {memberId: {eq: $memberId}}) {
                         nodes {
                             ${fields}
@@ -358,6 +367,36 @@ export default {
                 data.readCeremonies?.nodes.map((item) => {
                     return { ...item, attending: false };
                 }),
+            error(errors) {
+                this.handleErrors(errors);
+            },
+        },
+        qualifications: {
+            query() {
+                return gql`
+                    query ReadMembers($id: ID!) {
+                        readMembers(filter: { id: { eq: $id } }) {
+                            nodes {
+                                id
+                                qualifications {
+                                    qualificationid
+                                    description1
+                                    description2
+                                }
+                            }
+                        }
+                    }
+                `;
+            },
+            variables() {
+                return {
+                    id: this.memberId,
+                };
+            },
+            update: (data) =>
+                data.readMembers?.nodes.length
+                    ? data.readMembers?.nodes[0].qualifications
+                    : [],
             error(errors) {
                 this.handleErrors(errors);
             },

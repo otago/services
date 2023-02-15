@@ -3,16 +3,25 @@
 namespace Services\Graduation\Extensions;
 
 use OP\EBSWebservice;
+use Services\CMS\Controllers\Authenticate;
 use Services\EBS\Tasks\SyncMembers;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 
 class Member extends DataExtension
 {
     private static $db = [
         'QualificationJSON' => 'Text',
     ];
+
+    public function canView()
+    {
+        if (Authenticate::getMemberIDByJWT() == $this->owner->ID) {
+            return true;
+        }
+    }
 
     public function onAfterSync()
     {

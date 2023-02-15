@@ -25,14 +25,14 @@ SilverStripe\GraphQL\Schema\Schema:
       models:
         SilverStripe\Security\Member:
           fields:
-            id: Int
+            id: ID!
             qualifications:
               type: "[Qualification]"
           operations:
             read: true
         Services\Graduation\Regalia\Models\Submission:
           fields:
-            id: Int
+            id: ID!
             trencherSize: Int
             regaliaInfo: String
             deliveryLocation: String
@@ -44,7 +44,7 @@ SilverStripe\GraphQL\Schema\Schema:
             preferredGown: String
             gownRequirementsOther: String
             gownInstitutionOther: String
-            memberId: Int
+            memberId: ID!
             ceremonyIdsJSON: String
             ceremonies:
               fields:
@@ -61,7 +61,7 @@ SilverStripe\GraphQL\Schema\Schema:
                     memberId: true
             create:
               fields: &editableFields
-                id: Int
+                id: ID!
                 trencherSize: Int
                 regaliaInfo: String
                 deliveryLocation: String
@@ -78,7 +78,7 @@ SilverStripe\GraphQL\Schema\Schema:
               fields: *editableFields
         Services\Graduation\Regalia\Models\Ceremony:
           fields:
-            id: Int
+            id: ID!
             title: String
           operations:
             read: true
