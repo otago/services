@@ -9,7 +9,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\SAML\Authenticators\SAMLAuthenticator;
 use SilverStripe\SAML\Authenticators\SAMLLoginHandler;
 use SilverStripe\Security\Security;

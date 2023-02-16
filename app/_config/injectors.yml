@@ -7,3 +7,5 @@ SilverStripe\Core\Injector\Injector:
     class: Services\CMS\Injectors\CMSPagesController
   SilverStripe\CampaignAdmin\CampaignAdmin:
     class: Services\CMS\Injectors\CampaignAdmin
+  SilverStripe\SAML\Services\SAMLConfiguration:
+    class: Services\CMS\Injectors\SAMLConfiguration
