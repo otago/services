@@ -1,24 +1,9 @@
 ---
 Name: mysamlsettings
-After: "#samlsettings"
 ---
-SilverStripe\SAML\Services\SAMLConfiguration:
-  strict: false
-  debug: true
-  SP:
-    entityId: "https://jeffrey.op.ac.nz"
-    privateKey: "/var/www/html/services/certs/local.key"
-    x509cert: "/var/www/html/services/certs/local.cer"
-  IdP:
-    entityId: "https://devidp.op.ac.nz/adfs/services/trust"
-    x509cert: "/var/www/html/services/certs/devidp.pem"
-    singleSignOnService: "https://devidp.op.ac.nz/adfs/ls/"
-    metadata: "https://devidp.op.ac.nz/FederationMetadata/2007-06/FederationMetadata.xml"
-
 SilverStripe\SAML\Extensions\SAMLMemberExtension:
   claims_field_mappings:
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": "Email"
-
 ---
 Name: MyAuth
 After:
