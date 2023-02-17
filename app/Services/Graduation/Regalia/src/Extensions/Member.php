@@ -8,7 +8,6 @@ use Services\EBS\Tasks\SyncMembers;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\ORM\DataObject;
 
 class Member extends DataExtension
 {
