@@ -18,6 +18,9 @@
         "phpunit/phpunit": "^9.5"
     },
     "extra": {
+        "expose": [
+            "app/Serivces/Graduation/Regalia/client/dist"
+        ],
         "resources-dir": "_resources",
         "project-files-installed": [
             "app/.htaccess",
