@@ -19,7 +19,7 @@
     },
     "extra": {
         "expose": [
-            "app/Serivces/Graduation/Regalia/client/dist"
+            "app/Services/Graduation/Regalia/client/dist"
         ],
         "resources-dir": "_resources",
         "project-files-installed": [
