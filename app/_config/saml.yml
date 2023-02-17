@@ -4,13 +4,13 @@ Name: mysamlsettings
 SilverStripe\SAML\Extensions\SAMLMemberExtension:
   claims_field_mappings:
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": "Email"
----
-Name: MyAuth
-After:
-  - "#coresecurity"
----
-SilverStripe\Core\Injector\Injector:
-  SilverStripe\Security\Security:
-    properties:
-      authenticators:
-        default: '%$SilverStripe\SAML\Authenticators\SAMLAuthenticator'
+# ---
+# Name: MyAuth
+# After:
+#   - "#coresecurity"
+# ---
+# SilverStripe\Core\Injector\Injector:
+#   SilverStripe\Security\Security:
+#     properties:
+#       authenticators:
+#         default: '%$SilverStripe\SAML\Authenticators\SAMLAuthenticator'
