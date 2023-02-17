@@ -349,6 +349,9 @@ export default {
             error(errors) {
                 this.handleErrors(errors);
             },
+            skip() {
+                return !this.ceremonies.length;
+            },
         },
         ceremonies: {
             query() {

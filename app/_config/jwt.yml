@@ -1,4 +1,4 @@
 Level51\JWTUtils\JWTUtils:
-  secret: "this-is-my-secret"
+  secret: "LyoqKioqKi8gKCgpID0+IHsgLy8gd2VicGFja0Jvb3RzdHJhcAovKioqKioqLyAJdmFyIF9fd2VicGFja"
   lifetime_in_days: 7
   renew_threshold_in_minutes: 60
