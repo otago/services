@@ -6,32 +6,33 @@ import getJwt from './components/getJwt';
 import parseJwt from './components/parseJwt';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const appElement = document.getElementById('app');
-    const data = Object.assign({}, appElement.dataset);
-    const cache = new InMemoryCache();
-    const jwt = getJwt(data.authenticate);
-    if (!jwt) {
-        return;
-    }
-    const link = createHttpLink({
-        uri: data.graphql,
-    });
-    const authMiddleware = new ApolloLink((operation, forward) => {
-        operation.setContext({
-            headers: {
-                "Authorization": jwt
-            }
+    document.querySelectorAll(".services-graduation-regalia-client").forEach(element => {
+        const data = Object.assign({}, element.dataset);
+        const cache = new InMemoryCache();
+        const jwt = getJwt(data.authenticate);
+        if (!jwt) {
+            return;
+        }
+        const link = createHttpLink({
+            uri: data.graphql,
         });
-        return forward(operation);
-    })
-    const apolloClient = new ApolloClient({
-        link: concat(authMiddleware, link),
-        cache,
+        const authMiddleware = new ApolloLink((operation, forward) => {
+            operation.setContext({
+                headers: {
+                    "Authorization": jwt
+                }
+            });
+            return forward(operation);
+        })
+        const apolloClient = new ApolloClient({
+            link: concat(authMiddleware, link),
+            cache,
+        });
+        const apolloProvider = createApolloProvider({
+            defaultClient: apolloClient,
+        })
+        const app = createApp(App, { memberId: parseJwt(jwt).memberId, jwt: jwt });
+        app.use(apolloProvider);
+        app.mount(element);
     });
-    const apolloProvider = createApolloProvider({
-        defaultClient: apolloClient,
-    })
-    const app = createApp(App, { memberId: parseJwt(jwt).memberId, jwt: jwt });
-    app.use(apolloProvider);
-    app.mount(appElement);
 });
